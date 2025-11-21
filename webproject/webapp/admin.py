@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from .models import Client, Target, Service, Weapon, Staff, Booking, AmmoSales
 
 @admin.register(Client)

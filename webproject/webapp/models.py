@@ -45,10 +45,17 @@ class Service(models.Model):
 
 class Weapon(models.Model):
     """Модель оружия"""
+    status_choices = [
+        ('STATUS_AVAILABLE', 'Доступно'),
+        ('STATUS_IN_USE', 'В использовании'),
+        ('STATUS_MAINTENANCE', 'На обслуживании'),
+        ('STATUS_BROKEN', 'Сломан'),
+        ('STATUS_RESERVED', 'Зарезервировано'),
+    ]
     weapon_name = models.CharField(max_length=100, verbose_name="Название оружия")
     weapon_type = models.CharField(max_length=50, verbose_name="Тип оружия")
     caliber = models.CharField(max_length=20, verbose_name="Калибр")
-    status = models.CharField(max_length=50, verbose_name="Статус")
+    status = models.CharField(max_length=50, verbose_name="Статус", choices=status_choices)
     
     class Meta:
         verbose_name = "Оружие"
