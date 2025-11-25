@@ -34,5 +34,5 @@ class BookingAdmin(admin.ModelAdmin):
 
 @admin.register(AmmoSales)
 class AmmoSalesAdmin(admin.ModelAdmin):
-    list_display = ('booking', 'caliber', 'quantity', 'total_amount', 'sale_date')
+    list_display = ('booking', 'caliber', 'quantity', 'sale_date')
     list_filter = ('sale_date', 'caliber')

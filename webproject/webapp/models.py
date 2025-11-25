@@ -105,7 +105,6 @@ class AmmoSales(models.Model):
     caliber = models.CharField(max_length=20, verbose_name="Калибр")
     quantity = models.IntegerField(verbose_name="Количество")
     price_per_unit = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="Цена за единицу")
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Общая сумма")
     sale_date = models.DateField(verbose_name="Дата продажи")
     
     class Meta:
