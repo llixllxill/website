@@ -1,8 +1,13 @@
 from django.shortcuts import render
-from .models import Client, Booking, Weapon
+from .models import Client, Booking, Weapon, AmmoSales
 # Create your views here.
-def home(request):
-    return render(request, 'home.html')
+def index(request):
+    cartridges = AmmoSales.objects.all().order_by('caliber', 'price')[:6]
+    context = {'cartridges': cartridges,}
+    return render(request, 'index.html', context)
 
-def weapons_catalog(request):
-    return render(request, 'weapons_catalog.html')
+def catalog(request):
+    return render(request, 'catalog.html')
+
+def backet(request):
+    return render(request, 'backet.html')

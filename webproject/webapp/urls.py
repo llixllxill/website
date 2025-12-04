@@ -1,7 +1,8 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.home),
-    path('weapons_catalog', views.weapons_catalog),
+    path('', views.index, name='index'),
+    path('catalog', views.catalog, name='catalog'),
+    path('backet', views.backet, name='backet'),
 ]

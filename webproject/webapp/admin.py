@@ -28,11 +28,32 @@ class StaffAdmin(admin.ModelAdmin):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ('client', 'staff', 'booking_date', 'start_time', 'total_price')
+    list_display = ('client', 'booking_date', 'start_time', 'total_price')
     list_filter = ('booking_date', 'service')
     date_hierarchy = 'booking_date'
 
 @admin.register(AmmoSales)
 class AmmoSalesAdmin(admin.ModelAdmin):
-    list_display = ('booking', 'caliber', 'quantity', 'sale_date')
-    list_filter = ('sale_date', 'caliber')
+    list_display = ('get_name_display', 'get_caliber_display', 'manufacturer', 'price', 'quantity', 'created_at')
+    list_filter = ('name', 'caliber', 'manufacturer')
+    search_fields = ('manufacturer', 'description')
+    
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('name', 'caliber', 'manufacturer', 'description')
+        }),
+        ('Цена и количество', {
+            'fields': ('price', 'quantity')
+        }),
+    )
+    
+    readonly_fields = ('created_at',)
+    
+    def get_name_display(self, obj):
+        return obj.get_name_display_name()
+    
+    def get_caliber_display(self, obj):
+        return obj.get_caliber_display_name()
+    
+    get_name_display.short_description = 'Тип патронов'
+    get_caliber_display.short_description = 'Калибр'
