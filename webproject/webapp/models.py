@@ -1,8 +1,6 @@
 from django.db import models
-from django.utils import timezone
 
 class Client(models.Model):
-    """Модель клиента"""
     first_name = models.CharField(max_length=100, verbose_name="Имя")
     last_name = models.CharField(max_length=100, verbose_name="Фамилия")
     phone_number = models.CharField(max_length=20, verbose_name="Номер телефона")
@@ -17,7 +15,6 @@ class Client(models.Model):
 
 
 class Target(models.Model):
-    """Модель цели"""
     name = models.CharField(max_length=100, verbose_name="Название цели")
     target_type = models.CharField(max_length=50, verbose_name="Тип цели")
     difficulty_level = models.IntegerField(verbose_name="Уровень сложности")
@@ -31,7 +28,6 @@ class Target(models.Model):
 
 
 class Service(models.Model):
-    """Модель услуги"""
     service_name = models.CharField(max_length=100, verbose_name="Название услуги")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена")
     duration_minute = models.IntegerField(verbose_name="Продолжительность (минуты)")
@@ -45,7 +41,6 @@ class Service(models.Model):
 
 
 class Weapon(models.Model):
-    """Модель оружия"""
     status_choices = [
         ('STATUS_AVAILABLE', 'Доступно'),
         ('STATUS_IN_USE', 'В использовании'),
@@ -67,7 +62,6 @@ class Weapon(models.Model):
 
 
 class Staff(models.Model):
-    """Модель сотрудника"""
     first_name = models.CharField(max_length=100, verbose_name="Имя")
     last_name = models.CharField(max_length=100, verbose_name="Фамилия")
     hire_date = models.DateField(verbose_name="Дата найма")
@@ -81,7 +75,6 @@ class Staff(models.Model):
 
 
 class Booking(models.Model):
-    """Модель бронирования"""
     client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name="Клиент")
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE, verbose_name="Сотрудник")
     weapon = models.ForeignKey(Weapon, on_delete=models.CASCADE, verbose_name="Оружие")
@@ -100,10 +93,7 @@ class Booking(models.Model):
         return f"Бронирование {self.client} - {self.booking_date}"
 
 
-class AmmoSales(models.Model):
-    """Модель продаж боеприпасов"""
-    
-    # Выбор калибров
+class AmmoSales(models.Model): 
     CALIBER_CHOICES = [
         ('9x19', '9x19 мм (пистолетный)'),
         ('7.62x39', '7.62x39 мм (автоматный)'),
@@ -116,7 +106,6 @@ class AmmoSales(models.Model):
         ('45ACP', '.45 ACP (пистолетный)'),
     ]
     
-    # Выбор типов патронов
     TYPE_CHOICES = [
         ('PISTOL', 'Пистолетные патроны'),
         ('RIFLE', 'Винтовочные патроны'),
@@ -125,7 +114,7 @@ class AmmoSales(models.Model):
         ('HUNTING', 'Охотничьи патроны'),
     ]
     
-    # Основная информация
+
     name = models.CharField(
         max_length=200, 
         verbose_name="Тип патронов",
@@ -140,33 +129,28 @@ class AmmoSales(models.Model):
         default='9x19'
     )
     
-    # Производитель
     manufacturer = models.CharField(
         max_length=100,
         verbose_name="Производитель",
         default='Тульский патронный завод'
     )
     
-    # Цена
     price = models.IntegerField(
         verbose_name="Цена (руб)", 
         default=1500
     )
     
-    # Количество в упаковке
     quantity = models.IntegerField(
         verbose_name="Количество в упаковке", 
         default=20
     )
     
-    # Описание
     description = models.TextField(
         verbose_name="Описание", 
         blank=True,
         default='Качественные патроны для стрельбы'
     )
     
-    # Дата добавления
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Дата добавления"
@@ -178,20 +162,17 @@ class AmmoSales(models.Model):
         ordering = ['caliber', 'price']
     
     def price_per_round(self):
-        """Цена за один патрон"""
         if self.quantity > 0:
             return round(self.price / self.quantity, 2)
         return 0
     
     def get_caliber_display_name(self):
-        """Красивое отображение калибра"""
         for code, name in self.CALIBER_CHOICES:
             if code == self.caliber:
                 return name
         return self.caliber
     
     def get_name_display_name(self):
-        """Красивое отображение типа патронов"""
         for code, name in self.TYPE_CHOICES:
             if code == self.name:
                 return name
