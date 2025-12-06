@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 class Client(models.Model):
     first_name = models.CharField(max_length=100, verbose_name="Имя")
@@ -177,6 +178,9 @@ class AmmoSales(models.Model):
             if code == self.name:
                 return name
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse('ammo_detail', kwargs={'pk': self.id})
     
     def __str__(self):
         return f"{self.get_name_display_name()} - {self.get_caliber_display_name()}"

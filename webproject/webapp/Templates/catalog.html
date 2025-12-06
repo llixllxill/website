@@ -169,14 +169,32 @@
       margin-bottom: 3rem;
     }
 
+    @media (max-width: 1024px) {
+      .catalog-layout {
+        grid-template-columns: 240px 1fr;
+        gap: 1.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .catalog-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .filters-sidebar {
       background: var(--white);
       border-radius: 12px;
       padding: 1.5rem;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
       height: fit-content;
-      position: sticky;
-      top: 100px;
+    }
+
+    @media (min-width: 769px) {
+      .filters-sidebar {
+        position: sticky;
+        top: 100px;
+      }
     }
 
     .filters-title {
@@ -308,6 +326,14 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
+    @media (max-width: 768px) {
+      .sort-bar {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+      }
+    }
+
     .results-count {
       font-weight: 600;
       color: var(--dark);
@@ -323,10 +349,28 @@
       cursor: pointer;
     }
 
+    @media (max-width: 768px) {
+      .sort-select {
+        width: 100%;
+      }
+    }
+
     .products-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .product-card {
@@ -387,7 +431,7 @@
     }
 
     .product-title {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
       color: var(--dark);
@@ -442,20 +486,50 @@
       margin-bottom: 1.5rem;
     }
 
-    .add-to-cart {
-      width: 100%;
+    .product-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-cart {
+      flex: 1;
+      padding: 0.8rem;
       background: var(--red);
       color: white;
       border: none;
-      padding: 0.8rem;
       border-radius: 6px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s;
+      text-align: center;
     }
 
-    .add-to-cart:hover {
+    .btn-cart:hover {
       background: #c62828;
+    }
+
+    .btn-details {
+      flex: 1;
+      padding: 0.8rem;
+      background: white;
+      color: var(--red);
+      border: 2px solid var(--red);
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .btn-details:hover {
+      background: var(--red);
+      color: white;
+    }
+
+    @media (max-width: 480px) {
+      .product-actions {
+        flex-direction: column;
+      }
     }
 
     .pagination {
@@ -545,13 +619,28 @@
       font-size: 0.9rem;
     }
 
+    .hidden {
+      display: none !important;
+    }
+
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    .no-results-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
   </style>
 </head>
 
 <body>
   <header class="header">
     <div class="container header-container">
-      <a href="/" class="logo">
+      <a href="{% url 'index' %}" class="logo">
         <span class="logo-icon">🎯</span>
         <span>TargetPro</span>
       </a>
@@ -634,8 +723,6 @@
             </div>
           </div>
 
-     
-
           <button class="apply-filters" onclick="applyFilters()">Применить фильтры</button>
           <button class="reset-filters" onclick="resetFilters()">Сбросить фильтры</button>
         </aside>
@@ -674,7 +761,7 @@
                 <div class="product-type">
                   {{ cartridge.get_name_display_name }}
                 </div>
-                
+                <h3 class="product-title">{{ cartridge.manufacturer }}</h3>
                 <div class="product-caliber">{{ cartridge.get_caliber_display_name }}</div>
                 
                 <div class="product-specs">
@@ -695,9 +782,15 @@
                 <div class="product-price">
                   <div class="price-current">{{ cartridge.price }} ₽</div>
                   <div class="price-per-round">~{{ cartridge.price_per_round }} ₽ за патрон</div>
-                  <button class="add-to-cart" data-id="{{ cartridge.id }}" onclick="addToCart({{ cartridge.id }})">
-                    В корзину
-                  </button>
+                
+                  <div class="product-actions">
+                    <button class="btn-cart" onclick="addToCart({{ cartridge.id }})">
+                      В корзину
+                    </button>
+                    <a href="{% url 'ammo_detail' cartridge.id %}" class="btn-details">
+                      Подробнее
+                    </a>
+                  </div>
                 </div>
               </div>
             </article>
